@@ -70,27 +70,57 @@
 }
 
 - (void) initGitRepo {
-	NSFileManager *fm = [NSFileManager defaultManager];
-	[fm createDirectoryAtPath:self.gitDirectory attributes:nil];
+	NSFileManager *manager = [NSFileManager defaultManager];
+	[manager createDirectoryAtPath:self.gitDirectory
+	   withIntermediateDirectories:YES
+						attributes:nil
+							 error:nil];
 
 	//NSLog(@"Dir Created: %@ %d", gitDirectory, [gitDirectory length]);
 	NSString *config = @"[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = true\n\tlogallrefupdates = true\n";
 	NSString *configFile = [self.gitDirectory stringByAppendingPathComponent:@"config"];
-	[fm createFileAtPath:configFile contents:[NSData dataWithBytes:[config UTF8String] length:[config length]] attributes:nil];
+	[manager createFileAtPath:configFile contents:[NSData dataWithBytes:[config UTF8String] length:[config length]] attributes:nil];
 
 	NSString *head = @"ref: refs/heads/master\n";
 	NSString *headFile = [self.gitDirectory stringByAppendingPathComponent:@"HEAD"];
-	[fm createFileAtPath:headFile contents:[NSData dataWithBytes:[head UTF8String] length:[head length]] attributes:nil];
-
-	[fm createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"refs"] attributes:nil];
-	[fm createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"refs/heads"] attributes:nil];
-	[fm createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"refs/tags"] attributes:nil];
-	[fm createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"objects"] attributes:nil];
-	[fm createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"objects/info"] attributes:nil];
-	[fm createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"objects/pack"] attributes:nil];
-	[fm createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"branches"] attributes:nil];
-	[fm createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"hooks"] attributes:nil];
-	[fm createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"info"] attributes:nil];
+	[manager createFileAtPath:headFile contents:[NSData dataWithBytes:[head UTF8String] length:[head length]] attributes:nil];
+	
+	[manager createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"refs"]
+	   withIntermediateDirectories:YES
+						attributes:nil
+							 error:nil];
+	[manager createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"refs/heads"]
+	   withIntermediateDirectories:YES
+						attributes:nil
+							 error:nil];
+	[manager createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"refs/tags"]
+	   withIntermediateDirectories:YES
+						attributes:nil
+							 error:nil];
+	[manager createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"objects"]
+	   withIntermediateDirectories:YES
+						attributes:nil
+							 error:nil];
+	[manager createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"objects/info"]
+	   withIntermediateDirectories:YES
+						attributes:nil
+							 error:nil];
+	[manager createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"objects/pack"]
+	   withIntermediateDirectories:YES
+						attributes:nil
+							 error:nil];
+	[manager createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"branches"]
+	   withIntermediateDirectories:YES
+						attributes:nil
+							 error:nil];
+	[manager createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"hooks"]
+	   withIntermediateDirectories:YES
+						attributes:nil
+							 error:nil];
+	[manager createDirectoryAtPath:[self.gitDirectory stringByAppendingPathComponent:@"info"]
+	   withIntermediateDirectories:YES
+						attributes:nil
+							 error:nil];
 }
 
 - (NSString *) writeObject:(NSData *)objectData withType:(NSString *)type withSize:(int)size 
@@ -183,9 +213,9 @@
 	NSString *dir = [NSString stringWithFormat: @"%@/objects/%@", self.gitDirectory, looseSubDir];
 	
 	BOOL isDir;
-	NSFileManager *fm = [NSFileManager defaultManager];
-	if (!([fm fileExistsAtPath:dir isDirectory:&isDir] && isDir)) {
-		[fm createDirectoryAtPath:dir attributes:nil];
+	NSFileManager *manager = [NSFileManager defaultManager];
+	if (!([manager fileExistsAtPath:dir isDirectory:&isDir] && isDir)) {
+		[manager createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:nil];
 	}
 	
 	return [NSString stringWithFormat: @"%@/objects/%@/%@", \

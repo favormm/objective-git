@@ -31,12 +31,12 @@
 {
 	char *ptr, *bytes = (char *)[raw bytes]; 
     int len, rest;
-    len = (ptr = memchr(bytes, nil, len = [raw length])) ? ptr - bytes : len;
+    len = (ptr = memchr(bytes, (int)nil, len = [raw length])) ? ptr - bytes : len;
 	rest = [raw length] - len - 1;
 	
 	ptr++;
-    NSString *header   = [NSString stringWithCString:bytes length:len];
-    contents = [NSString stringWithCString:ptr length:rest];
+    NSString *header   = [NSString stringWithCString:bytes encoding:NSUTF8StringEncoding];
+    contents = [NSString stringWithCString:ptr encoding:NSUTF8StringEncoding];
 	
 	rawContents = malloc(rest);
 	memcpy(rawContents, ptr, rest);
